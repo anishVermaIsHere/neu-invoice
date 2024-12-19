@@ -1,0 +1,54 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getAuth } from "@/auth"; // Replace with your auth logic
+import { prisma } from "@/lib/prisma/db"; // Replace with your Prisma instance
+
+export async function middleware(req: NextRequest) {
+  // const { pathname } = req.nextUrl;
+
+  // // Step 1: Authenticate the user
+  // const session = await getAuth();
+
+  // // If the user is not authenticated, redirect to the login page
+  // if (!session?.user) {
+  //   const loginUrl = new URL("/", req.url); // Replace "/" with your login route
+  //   return NextResponse.redirect(loginUrl);
+  // }
+
+  // // Step 2: Check onboarding status
+  // const user = await prisma.user.findUnique({
+  //   where: { id: session.user.id },
+  //   select: {
+  //     firstName: true,
+  //     lastName: true,
+  //     address: true,
+  //     email: true,
+  //   },
+  // });
+
+  // const isOnboardingCompleted = !!(
+  //   user?.firstName &&
+  //   user?.lastName &&
+  //   user?.address &&
+  //   user?.email
+  // );
+
+  // // Step 3: Redirect based on onboarding status and current path
+  // if (!isOnboardingCompleted && pathname !== "/onboarding") {
+  //   const onboardingUrl = new URL("/onboarding", req.url);
+  //   return NextResponse.redirect(onboardingUrl);
+  // }
+
+  // if (isOnboardingCompleted && pathname === "/onboarding") {
+  //   const dashboardUrl = new URL("/dashboard", req.url); // Replace with your dashboard route
+  //   return NextResponse.redirect(dashboardUrl);
+  // }
+
+  // // Allow the request to proceed if no redirection is needed
+  // return NextResponse.next();
+}
+
+
+export const config = {
+    matcher: [ "/dashboard/:path*", "/onboarding" ],
+  };
