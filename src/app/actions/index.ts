@@ -75,7 +75,7 @@ export async function createInvoice(prevState: any, formData: FormData) {
     name: "David Paul",
   };
 
-  console.log(submission.value);
+  console.log('invoice', submission.value);
   // mailtrapClient.send({
   //   from: sender,
   //   to: [{ email: "jan@alenix.de" }],
