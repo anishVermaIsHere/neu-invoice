@@ -14,7 +14,10 @@ const AppConfig = {
         email: process.env.EMAIL_FROM!
     },
     mailTrap: {
-        token: process.env.MAILTRAP_TOKEN!
+        token: process.env.MAILTRAP_TOKEN!,
+        senderName: process.env.MAILTRAP_SENDER_NAME!,
+        senderEmail: process.env.MAILTRAP_SENDER_EMAIL!,
+        supportEmail: process.env.MAILTRAP_SUPPORT_EMAIL!
     },
     dbUrl: process.env.DATABASE_URL!,
     authSecret: process.env.AUTH_SECRET!

@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { formatCurrency } from "@/shared/utils";
 import { CurrencyType } from "@/interfaces";
 import { mailtrapClient } from "@/config/mailtrap.config";
+import AppConfig from "@/config/app.config";
+import fakeInvoices from "@/shared/data/Invoice.json"
 
 
 export const handleLogout = async () => await signOut();
@@ -47,53 +49,60 @@ export async function createInvoice(prevState: any, formData: FormData) {
     return submission.reply();
   }
 
-  const data = await prisma.invoice.create({
-    data: {
-      clientAddress: submission.value.clientAddress,
-      clientEmail: submission.value.clientEmail,
-      clientName: submission.value.clientName,
-      currency: submission.value.currency,
+  const data = await prisma.invoice.createMany({
+    data: fakeInvoices.map((s)=>({
+      clientAddress: s.clientAddress,
+      clientEmail: s.clientEmail,
+      clientName: s.clientName,
+      currency: s.currency,
       date: submission.value.date,
-      dueDate: submission.value.dueDate,
-      fromAddress: submission.value.fromAddress,
-      fromEmail: submission.value.fromEmail,
-      fromName: submission.value.fromName,
-      description: submission.value.description,
-      quantity: submission.value.quantity,
-      rate: submission.value.rate,
-      name: submission.value.name,
-      invoiceNumber: submission.value.invoiceNumber,
-      status: submission.value.status,
-      total: submission.value.total,
-      note: submission.value.note,
+      dueDate: s.dueDate,
+      fromAddress: s.fromAddress,
+      fromEmail: s.fromEmail,
+      fromName: s.fromName,
+      description: s.description,
+      quantity: s.quantity,
+      rate: s.rate,
+      name: s.name,
+      invoiceNumber: s.invoiceNumber,
+      status: "PENDING",
+      total: s.total,
+      note: s.note,
       userId: session?.user?.id,
-    },
+    })),
+  });
+
+  const totalAmount = formatCurrency({
+    amount: submission.value.total,
+    currency: submission.value.currency as CurrencyType,
   });
 
   const sender = {
-    email: "hello@demomailtrap.com",
-    name: "David Paul",
+    email: AppConfig.mailTrap.senderEmail,
+    name: AppConfig.mailTrap.senderName,
   };
 
-  console.log('invoice', submission.value);
+
+  console.log('invoice', data);
+
   // mailtrapClient.send({
   //   from: sender,
-  //   to: [{ email: "jan@alenix.de" }],
-  //   template_uuid: "3c01e4ee-a9ed-4cb6-bbf7-e57c2ced6c94",
+  //   to: [{ email: submission.value.clientEmail }],
+  //   template_uuid: "794e66aa-d559-469d-9730-f6ce99a991e9",
   //   template_variables: {
   //     clientName: submission.value.clientName,
   //     invoiceNumber: submission.value.invoiceNumber,
-  //     invoiceDueDate: new Intl.DateTimeFormat("en-US", {
+  //     invoiceDate: new Intl.DateTimeFormat("en-US", {
   //       dateStyle: "long",
   //     }).format(new Date(submission.value.date)),
-  //     invoiceAmount: formatCurrency({
-  //       amount: submission.value.total,
-  //       currency: submission.value.currency as CurrencyType,
-  //     }),
-  //     invoiceLink:
-  //       process.env.NODE_ENV !== "production"
-  //         ? `http://localhost:3000/api/invoice/${data.id}`
-  //         : `https://invoice-marshal.vercel.app/api/invoice/${data.id}`,
+  //     invoiceAmount: totalAmount,
+  //     invoiceTotal: totalAmount,
+  //     supportEmail: AppConfig.mailTrap.supportEmail,
+  //     companyName: `${AppConfig.appName} Invoice`
+  //     // invoiceLink:
+  //     //   process.env.NODE_ENV !== "production"
+  //     //     ? `http://localhost:3000/api/invoice/${data.id}`
+  //     //     : `https://invoice-marshal.vercel.app/api/invoice/${data.id}`,
   //   },
   // });
 

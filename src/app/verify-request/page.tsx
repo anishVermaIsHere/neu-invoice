@@ -4,7 +4,7 @@ import LinkElement from '@/components/ui/link'
 
 const VerifyRequestPage = () => {
   return (
-    <MainContainer>
+    <MainContainer classes='flex justify-center items-center'>
         <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Verify</CardTitle>

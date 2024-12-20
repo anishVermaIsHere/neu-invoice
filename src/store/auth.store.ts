@@ -9,6 +9,7 @@ export interface User {
     lastName: string | null | undefined;
     email: string | null | undefined;
     address: string;
+    image: string | null | undefined;
 };
 
 interface AuthState {

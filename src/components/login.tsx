@@ -10,10 +10,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/auth";
-import AppConfig from "@/config/app.config";
 import Image from "next/image";
 
 export function Login() {
+  
   const handleSubmit = async (formdata: FormData) => {
     "use server";
     await signIn('nodemailer', { email: formdata.get("email") as string });
@@ -31,8 +31,6 @@ export function Login() {
         <CardTitle>
           <div className="p-2 mb-3 flex items-center justify-center text-2xl rounded">
             <span><Image src="/neu-invoice.png" alt="logo" width={120} height={100} /></span>
-            {/* <span className="text-indigo-500 me-1">{AppConfig.appName} </span>  */}
-            {/* <span className="text-gray-400">Invoice</span> */}
           </div>
           <div className="text-center">Login</div>
         </CardTitle>

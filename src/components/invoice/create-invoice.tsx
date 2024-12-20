@@ -1,5 +1,4 @@
 "use client";
-
 import { useActionState, useState } from "react";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
@@ -7,18 +6,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Popover, PopoverContent,PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { invoiceSchema } from "@/shared/schemas";
@@ -29,12 +18,13 @@ import { CurrencyType } from "@/interfaces";
 import { User } from "@/store/auth.store";
 import { currencies } from "@/shared/data";
 
+
 export function CreateInvoice({
   address,
   email,
   firstName,
   lastName,
-}: Omit<User, "id">) {
+}: Omit<User, "id" | "image">) {
   const [lastResult, action] = useActionState(createInvoice, undefined);
   const [form, fields] = useForm({
     lastResult,
@@ -56,10 +46,6 @@ export function CreateInvoice({
     date: new Date(),
   });
 
-  // const [selectedDate, setSelectedDate] = useState(new Date());
-  // const [rate, setRate] = useState("");
-  // const [quantity, setQuantity] = useState("");
-  // const [currency, setCurrency] = useState("USD");
 
   const calcualteTotal =
     (Number(invoiceValues.quantity) || 0) * (Number(invoiceValues.rate) || 0);
@@ -68,10 +54,8 @@ export function CreateInvoice({
     setInvoiceValues((prev) => ({ ...prev, [key]: value }));
   };
 
-  console.log("all values", invoiceValues);
-
   return (
-    <Card className="w-full max-w-4xl min-h-[60vh] mx-auto">
+    <Card className="w-full min-h-[60vh] border-none shadow-none mx-auto">
       <CardContent className="p-6">
         <form id={form.id} action={action} onSubmit={form.onSubmit} noValidate>
           <input
