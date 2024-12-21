@@ -56,12 +56,13 @@ export async function InvoiceTable() {
         <TableRow>
           <TableHead className="w-[100px]">Inv. No.</TableHead>
           <TableHead>Customer</TableHead>
+          <TableHead>Customer email</TableHead>
           <TableHead className="">Date</TableHead>
           <TableHead className="">Qty</TableHead>
           <TableHead className="">Rate</TableHead>
           <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="">Due date</TableHead>
           <TableHead className="text-center">Status</TableHead>
-          <TableHead className="text-center">Method</TableHead>
           <TableHead className="text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -72,22 +73,19 @@ export async function InvoiceTable() {
               {invoice?.invoiceNumber}
             </TableCell>
             <TableCell>{invoice?.clientName}</TableCell>
-            <TableCell className="">
-              {format(invoice?.date, "dd/MM/yyyy")}
-            </TableCell>
+            <TableCell>{invoice?.clientEmail}</TableCell>
+            <TableCell>{format(invoice?.date, "dd/MM/yyyy")}</TableCell>
             <TableCell>{invoice?.quantity}</TableCell>
             <TableCell>{invoice?.rate}</TableCell>
             <TableCell className="text-right">{invoice?.total}</TableCell>
+            <TableCell>{format(invoice?.dueDate, "dd/MM/yyyy")}</TableCell>
             <TableCell className="text-center">
               {invoiceStatus(invoice?.status)}
             </TableCell>
             <TableCell className="text-center">
-              {invoice?.paymentMethod || "-"}
-            </TableCell>
-            <TableCell className="text-center">
               <InvoiceActions
                 id={invoice?.id}
-                status={invoice?.paymentStatus}
+                status={invoice?.status}
               />
             </TableCell>
           </TableRow>

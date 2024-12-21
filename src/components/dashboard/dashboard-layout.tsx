@@ -11,6 +11,7 @@ import SessionProvider from "../sesion-provider";
 
 
 
+
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   const session = await getAuth();
   const user = await findUser(session?.user?.id as string);

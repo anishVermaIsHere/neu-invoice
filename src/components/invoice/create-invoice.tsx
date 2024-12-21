@@ -6,8 +6,18 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent,PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { invoiceSchema } from "@/shared/schemas";
@@ -15,20 +25,14 @@ import { formatCurrency } from "@/shared/utils";
 import { createInvoice } from "@/app/actions";
 import { Icons } from "../ui/icons";
 import { CurrencyType } from "@/interfaces";
-import { User } from "@/store/auth.store";
 import { currencies } from "@/shared/data";
+import useAuthStore from "@/store/auth.store";
 
-
-export function CreateInvoice({
-  address,
-  email,
-  firstName,
-  lastName,
-}: Omit<User, "id" | "image">) {
+export default function CreateInvoiceForm() {
+  const { user: { firstName, lastName, email, address} } = useAuthStore(s=>s); 
   const [lastResult, action] = useActionState(createInvoice, undefined);
   const [form, fields] = useForm({
     lastResult,
-
     onValidate({ formData }) {
       return parseWithZod(formData, {
         schema: invoiceSchema,
@@ -44,15 +48,17 @@ export function CreateInvoice({
     quantity: "",
     currency: "USD",
     date: new Date(),
+    dueDate: new Date(),
   });
 
-
-  const calcualteTotal =
+  const calculateTotal =
     (Number(invoiceValues.quantity) || 0) * (Number(invoiceValues.rate) || 0);
 
   const handleChange = (key: string, value: string | Date | undefined) => {
     setInvoiceValues((prev) => ({ ...prev, [key]: value }));
   };
+
+  console.log('fields',fields)
 
   return (
     <Card className="w-full min-h-[60vh] border-none shadow-none mx-auto">
@@ -67,12 +73,12 @@ export function CreateInvoice({
           <input
             type="hidden"
             name={fields.total.name}
-            value={calcualteTotal}
+            value={calculateTotal}
           />
 
           <div className="flex flex-col gap-1 w-fit mb-6">
             <div className="flex items-center gap-4">
-            <Label>Invoice label</Label>
+              <Label>Invoice label</Label>
               <Input
                 name={fields.name.name}
                 key={fields.name.key}
@@ -227,21 +233,35 @@ export function CreateInvoice({
             </div>
 
             <div>
-              <Label>Invoice Due</Label>
-              <Select
-                name={fields.dueDate.name}
-                key={fields.dueDate.key}
-                defaultValue={fields.dueDate.initialValue}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select due date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0">Due on Reciept</SelectItem>
-                  <SelectItem value="15">Net 15</SelectItem>
-                  <SelectItem value="30">Net 30</SelectItem>
-                </SelectContent>
-              </Select>
+              <div>
+                <Label>Due date</Label>
+              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-[280px] text-left justify-start"
+                  >
+                    <Icons.calendar />
+
+                    {invoiceValues.dueDate ? (
+                      new Intl.DateTimeFormat("en-US", {
+                        dateStyle: "long",
+                      }).format(new Date(invoiceValues.dueDate))
+                    ) : (
+                      <span>Pick a Date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <Calendar
+                    selected={invoiceValues.dueDate}
+                    onSelect={(date) => handleChange("dueDate", date)}
+                    mode="single"
+                    fromDate={new Date()}
+                  />
+                </PopoverContent>
+              </Popover>
               <p className="text-red-500 text-sm">{fields.dueDate.errors}</p>
             </div>
           </div>
@@ -293,7 +313,7 @@ export function CreateInvoice({
               <div className="col-span-2">
                 <Input
                   value={formatCurrency({
-                    amount: calcualteTotal,
+                    amount: calculateTotal,
                     currency: invoiceValues.currency as CurrencyType,
                   })}
                   disabled
@@ -308,7 +328,7 @@ export function CreateInvoice({
                 <span>Subtotal</span>
                 <span>
                   {formatCurrency({
-                    amount: calcualteTotal,
+                    amount: calculateTotal,
                     currency: invoiceValues.currency as CurrencyType,
                   })}
                 </span>
@@ -317,7 +337,7 @@ export function CreateInvoice({
                 <span>Total ({invoiceValues.currency})</span>
                 <span className="font-medium underline underline-offset-2">
                   {formatCurrency({
-                    amount: calcualteTotal,
+                    amount: calculateTotal,
                     currency: invoiceValues.currency as CurrencyType,
                   })}
                 </span>

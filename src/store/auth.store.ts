@@ -8,8 +8,11 @@ export interface User {
     firstName: string | null | undefined;
     lastName: string | null | undefined;
     email: string | null | undefined;
+    emailVerfied: Date | string;
     address: string;
     image: string | null | undefined;
+    createdAt: Date | string;
+    updatedAt: Date | string;
 };
 
 interface AuthState {
