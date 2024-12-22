@@ -71,6 +71,7 @@ const getInvoice = async (invoiceId: string) => {
                 rate: true,
                 total: true,
                 date: true,
+                dueDate: true,
                 status: true,
                 currency: true,
                 note: true,

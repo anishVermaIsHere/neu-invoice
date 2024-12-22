@@ -27,20 +27,24 @@ import { Icons } from "../ui/icons";
 import { CurrencyType } from "@/interfaces";
 import { currencies } from "@/shared/data";
 import useAuthStore from "@/store/auth.store";
+import { Prisma } from "@prisma/client";
 
 
 
-export default function CreateInvoiceForm() {
-  const { user: { firstName, lastName, email, address} } = useAuthStore(s=>s); 
+type EditInvoiceFormPropsType = {
+    invoiceData: Prisma.InvoiceGetPayload<{}>
+}
+
+export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvoiceFormPropsType }) {
+  const { user: { firstName, lastName, email, address } } = useAuthStore(s=>s); 
   const [lastResult, action] = useActionState(createInvoice, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
       return parseWithZod(formData, {
-        schema: invoiceSchema,
+        schema: invoiceSchema
       });
     },
-
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput"
   });
@@ -50,7 +54,7 @@ export default function CreateInvoiceForm() {
     quantity: "",
     currency: "USD",
     date: new Date(),
-    dueDate: new Date(),
+    dueDate: new Date()
   });
 
   const calculateTotal = (Number(invoiceValues.quantity) || 0) * (Number(invoiceValues.rate) || 0);

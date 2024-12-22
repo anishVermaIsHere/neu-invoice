@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,6 +9,7 @@ import {
 import Link from "next/link";
 import { Icons } from "../ui/icons";
 import toast from "react-hot-toast";
+
 
 const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
   const handleSendReminder = () => {
@@ -37,7 +37,7 @@ const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/dashboard/invoices/${id}`}>
+          <Link href={`/dashboard/invoices/${id}/edit`}>
             <Icons.pencil className="size-4 mr-2" /> Edit Invoice
           </Link>
         </DropdownMenuItem>

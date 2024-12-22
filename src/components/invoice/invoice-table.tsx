@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// import { invoices } from "@/shared/data"
 import InvoiceActions from "./invoice-actions";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
@@ -26,12 +25,6 @@ const invoiceStatus = (status: string) => {
         </Badge>
       );
     case "pending":
-      return (
-        <Badge className="text-orange-500 bg-muted hover:bg-muted  max-w-20 p-2 rounded">
-          {status}
-        </Badge>
-      );
-    case "unpaid":
       return (
         <Badge className="text-red-500 bg-muted hover:bg-muted  max-w-20 p-2 rounded">
           {status}
@@ -107,6 +100,6 @@ export async function InvoiceTable() {
     </Table>
     
   ) : (
-    <Empty message="No invoices create" />
+    <Empty message="No invoices" />
   );
 }

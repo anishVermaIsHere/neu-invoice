@@ -11,7 +11,6 @@ const InvoicePage = () => {
         <div className="flex items-center">
           <CreateInvoiceButton />
         </div>
-
         <InvoiceTable />
       </Section>
     </DashboardLayout>
