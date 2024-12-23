@@ -35,36 +35,37 @@ export async function GET(
   // Add the image to the PDF (image type PNG, and coordinates on the PDF)
   pdf.addImage(`data:image/png;base64,${imageBase64}`, 'PNG', 20, 10, 30, 10); 
 
- 
   //set header
   pdf.setFontSize(24);
   pdf.text(invoice.name, 20, 30);
 
   // From Section
-  pdf.setFontSize(12);
-  pdf.text("FROM", 20, 40);
+  // pdf.setFontSize(12);
+  // pdf.text("FROM", 100, 30);
   pdf.setFontSize(10);
-  pdf.text([invoice.fromName, invoice.fromEmail, invoice.fromAddress], 20, 45);
+  pdf.setFont("helvetica", "bold");
+  pdf.text([invoice.fromName, invoice.fromEmail, invoice.fromAddress], 150, 30);
 
   // Client Section
   pdf.setFontSize(12);
-  pdf.text("TO", 20, 70);
+  pdf.text("BILLED TO", 20, 70);
+  pdf.setFont("helvetica", "normal");
   pdf.setFontSize(10);
   pdf.text([invoice.clientName, invoice.clientEmail, invoice.clientAddress], 20, 75);
 
   // Invoice details
   pdf.setFontSize(10);
-  pdf.text(`INVOICE No.: #${invoice.invoiceNumber}`, 120, 40);
+  pdf.text(`INVOICE No.: #INV-${invoice.invoiceNumber}`, 20, 50);
   pdf.text(
-    `Date: ${new Intl.DateTimeFormat("en-US", {
+    `Date Issued: ${new Intl.DateTimeFormat("en-US", {
       dateStyle: "long",
     }).format(invoice.date)}`,
-    120,
-    45
+    20,
+    55
   );
   pdf.text(`Due Date: ${new Intl.DateTimeFormat("en-US", {
       dateStyle: "long",
-    }).format(invoice.date)}`, 120, 50);
+    }).format(invoice.date)}`, 20, 60);
 
   // Item table header
   pdf.setFontSize(10);
@@ -114,7 +115,11 @@ export async function GET(
   }
 
   pdf.setFont("helvetica", "bold");
-  pdf.text("For any enquires, email us on davidpaul@example.com", 20, 160);
+  pdf.text("For any enquires, email us on davidpaul@example.com", 20, 200);
+
+  pdf.setFontSize(14);
+  pdf.text("Thank You For Your Business!", 80, 220);
+
   // generate pdf as buffer
   const pdfBuffer = Buffer.from(pdf.output("arraybuffer"));
   

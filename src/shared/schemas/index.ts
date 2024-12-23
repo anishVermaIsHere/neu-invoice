@@ -1,5 +1,7 @@
 import { z, object, string, number } from "zod";
 
+export const InvoiceStatus = z.enum(["PAID", "PENDING"]);
+
 export const onboardingSchema = object({
   firstName: string().min(2, "First name is required"),
   lastName: string().min(1, "Last name is required"),
@@ -14,7 +16,7 @@ export const invoiceSchema = object({
   rate: number().min(1, "Rate is required"),
   total: number().min(1, "1$ is minimum"),
   date: string().min(1, "Date is required"),
-  status: z.enum(["PAID", "PENDING"]).default("PENDING"),
+  status: InvoiceStatus.default("PENDING"),
   dueDate: string().min(1, "Due Date is required"),
   fromName: string().min(1, "Your name is required"),
   fromEmail: string().email("Invalid Email address"),

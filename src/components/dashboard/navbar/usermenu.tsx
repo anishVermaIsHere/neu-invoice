@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Icons } from "@/components/ui/icons";
-import { handleLogout } from "@/app/actions";
+import { handleLogout } from "@/app/actions/user.action";
 import useAuthStore from "@/store/auth.store";
 
 export function UserMenu() {

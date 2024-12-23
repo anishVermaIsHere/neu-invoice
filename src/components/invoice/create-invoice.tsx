@@ -21,8 +21,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { invoiceSchema } from "@/shared/schemas";
-import { formatCurrency } from "@/shared/utils";
-import { createInvoice } from "@/app/actions";
+import { formatCurrency, generateInvoiceNumber } from "@/shared/utils";
+import { createInvoice } from "@/app/actions/invoice.action";
 import { Icons } from "../ui/icons";
 import { CurrencyType } from "@/interfaces";
 import { currencies } from "@/shared/data";
@@ -44,6 +44,8 @@ export default function CreateInvoiceForm() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput"
   });
+
+  const invoiceNumber = generateInvoiceNumber();
 
   const [invoiceValues, setInvoiceValues] = useState({
     rate: "",
@@ -76,7 +78,11 @@ export default function CreateInvoiceForm() {
             name={fields.dueDate.name}
             value={invoiceValues.dueDate.toISOString()}
           />
-
+          <input
+            type="hidden"
+            name={fields.invoiceNumber.name}
+            value={invoiceNumber}
+          />
           <input
             type="hidden"
             name={fields.total.name}
@@ -106,9 +112,10 @@ export default function CreateInvoiceForm() {
                 <Input
                   name={fields.invoiceNumber.name}
                   key={fields.invoiceNumber.key}
-                  defaultValue={fields.invoiceNumber.initialValue}
+                  defaultValue={invoiceNumber}
                   className="rounded-l-none"
                   placeholder="5"
+                  disabled
                 />
               </div>
               <p className="text-red-500 text-sm">

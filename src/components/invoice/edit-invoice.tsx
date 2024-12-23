@@ -22,11 +22,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { invoiceSchema } from "@/shared/schemas";
 import { formatCurrency } from "@/shared/utils";
-import { createInvoice } from "@/app/actions";
+import { editInvoice } from "@/app/actions/invoice.action";
 import { Icons } from "../ui/icons";
 import { CurrencyType } from "@/interfaces";
 import { currencies } from "@/shared/data";
-import useAuthStore from "@/store/auth.store";
 import { Prisma } from "@prisma/client";
 
 
@@ -35,9 +34,8 @@ type EditInvoiceFormPropsType = {
     invoiceData: Prisma.InvoiceGetPayload<{}>
 }
 
-export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvoiceFormPropsType }) {
-  const { user: { firstName, lastName, email, address } } = useAuthStore(s=>s); 
-  const [lastResult, action] = useActionState(createInvoice, undefined);
+export default function EditInvoiceForm({ invoiceData }: EditInvoiceFormPropsType) {
+  const [lastResult, action] = useActionState(editInvoice, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -50,17 +48,16 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
   });
 
   const [invoiceValues, setInvoiceValues] = useState({
-    rate: "",
-    quantity: "",
-    currency: "USD",
-    date: new Date(),
-    dueDate: new Date()
+    rate: invoiceData.rate,
+    quantity: invoiceData.quantity,
+    currency: invoiceData.currency,
+    date: invoiceData.date,
+    dueDate: invoiceData.dueDate
   });
 
   const calculateTotal = (Number(invoiceValues.quantity) || 0) * (Number(invoiceValues.rate) || 0);
 
   const handleChange = (key: string, value: string | Date | undefined) => {
-    console.log('values', invoiceValues)
     setInvoiceValues((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -69,6 +66,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
     <Card className="w-full min-h-[60vh] border-none shadow-none mx-auto">
       <CardContent className="p-6">
         <form id={form.id} action={action} onSubmit={form.onSubmit} noValidate>
+          <input type="hidden" name="id" value={invoiceData.id} />
           <input
             type="hidden"
             name={fields.date.name}
@@ -79,6 +77,12 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
             type="hidden"
             name={fields.dueDate.name}
             value={invoiceValues.dueDate.toISOString()}
+          />
+
+        <input
+            type="hidden"
+            name={fields.invoiceNumber.name}
+            value={invoiceData.invoiceNumber}
           />
 
           <input
@@ -93,7 +97,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
               <Input
                 name={fields.name.name}
                 key={fields.name.key}
-                defaultValue={fields.name.initialValue}
+                defaultValue={invoiceData.name}
                 placeholder="Invoice I2024"
               />
             </div>
@@ -110,9 +114,10 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                 <Input
                   name={fields.invoiceNumber.name}
                   key={fields.invoiceNumber.key}
-                  defaultValue={fields.invoiceNumber.initialValue}
+                  defaultValue={invoiceData.invoiceNumber}
                   className="rounded-l-none"
                   placeholder="5"
+                  disabled
                 />
               </div>
               <p className="text-red-500 text-sm">
@@ -123,7 +128,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
             <div>
               <Label>Currency</Label>
               <Select
-                defaultValue="USD"
+                defaultValue={invoiceData.currency}
                 name={fields.currency.name}
                 key={fields.currency.key}
                 onValueChange={(value) => handleChange("currency", value)}
@@ -151,14 +156,14 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                   name={fields.fromName.name}
                   key={fields.fromName.key}
                   placeholder="Your Name"
-                  defaultValue={firstName + " " + lastName}
+                  defaultValue={invoiceData.fromName}
                 />
                 <p className="text-red-500 text-sm">{fields.fromName.errors}</p>
                 <Input
                   placeholder="Your Email"
                   name={fields.fromEmail.name}
                   key={fields.fromEmail.key}
-                  defaultValue={email as string}
+                  defaultValue={invoiceData.fromEmail}
                 />
                 <p className="text-red-500 text-sm">
                   {fields.fromEmail.errors}
@@ -167,7 +172,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                   placeholder="Your Address"
                   name={fields.fromAddress.name}
                   key={fields.fromAddress.key}
-                  defaultValue={address}
+                  defaultValue={invoiceData.fromAddress}
                 />
                 <p className="text-red-500 text-sm">
                   {fields.fromAddress.errors}
@@ -181,7 +186,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                 <Input
                   name={fields.clientName.name}
                   key={fields.clientName.key}
-                  defaultValue={fields.clientName.initialValue}
+                  defaultValue={invoiceData.clientName}
                   placeholder="Client Name"
                 />
                 <p className="text-red-500 text-sm">
@@ -190,7 +195,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                 <Input
                   name={fields.clientEmail.name}
                   key={fields.clientEmail.key}
-                  defaultValue={fields.clientEmail.initialValue}
+                  defaultValue={invoiceData.clientEmail}
                   placeholder="Client Email"
                 />
                 <p className="text-red-500 text-sm">
@@ -199,7 +204,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                 <Input
                   name={fields.clientAddress.name}
                   key={fields.clientAddress.key}
-                  defaultValue={fields.clientAddress.initialValue}
+                  defaultValue={invoiceData.clientAddress}
                   placeholder="Client Address"
                 />
                 <p className="text-red-500 text-sm">
@@ -292,7 +297,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
                   rows={5}
                   name={fields.description.name}
                   key={fields.description.key}
-                  defaultValue={fields.description.initialValue}
+                  defaultValue={invoiceData.description}
                   placeholder="Item name & description"
                 />
                 <p className="text-red-500 text-sm">
@@ -363,7 +368,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
               rows={5}
               name={fields.note.name}
               key={fields.note.key}
-              defaultValue={fields.note.initialValue}
+              defaultValue={invoiceData.note as string}
               placeholder="Add your Notes right here..."
             />
             <p className="text-red-500 text-sm">{fields.note.errors}</p>
@@ -371,7 +376,7 @@ export default function EditInvoiceForm({ invoiceData }: { invoiceData: EditInvo
 
           <div className="flex items-center justify-end mt-6">
             <div>
-              <Button>Send to Client</Button>
+              <Button>Update invoice</Button>
             </div>
           </div>
         </form>

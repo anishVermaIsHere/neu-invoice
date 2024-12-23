@@ -9,7 +9,8 @@ import {
 import Link from "next/link";
 import { Icons } from "../ui/icons";
 import toast from "react-hot-toast";
-
+import { markedInvoiceAsPaid } from "@/app/actions/invoice.action";
+import { ActionAlert } from "./action-alert";
 
 const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
   const handleSendReminder = () => {
@@ -26,6 +27,12 @@ const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
         error: "Failed to send reminder email",
       }
     );
+  };
+
+  const markedAsPaid = () => {
+    markedInvoiceAsPaid(id).then(() => {
+      toast.success("Marked as paid");
+    });
   };
 
   return (
@@ -55,11 +62,14 @@ const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
           </Link>
         </DropdownMenuItem>
         {status !== "PAID" && (
-          <DropdownMenuItem asChild>
-            <Link href={`/dashboard/invoices/${id}/paid`}>
-              <Icons.circlecheck className="size-4 mr-2" /> Mark as Paid
-            </Link>
-          </DropdownMenuItem>
+            <ActionAlert
+              toggleButton={
+                <DropdownMenuItem>
+                  <Icons.circlecheck className="size-4 mr-2" /> Mark as Paid
+                </DropdownMenuItem>
+              }
+              continueHandler={markedAsPaid}
+            />
         )}
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,3 +1,5 @@
+import { invoiceSchema, onboardingSchema } from "@/shared/schemas";
+import { TypeOf } from "zod";
 
 
 interface IDashCard {
@@ -13,8 +15,14 @@ interface ICurrency {
     currency: CurrencyType;
 }
 
+
+type InvoiceType = TypeOf<typeof invoiceSchema>
+type OnboardUserType = TypeOf<typeof onboardingSchema>
+
 export type {
     IDashCard,
     ICurrency,
-    CurrencyType
+    CurrencyType,
+    InvoiceType,
+    OnboardUserType
 }

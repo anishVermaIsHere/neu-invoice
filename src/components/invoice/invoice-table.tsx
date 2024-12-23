@@ -42,7 +42,7 @@ export async function InvoiceTable() {
 
   return invoices.length ? (
     <Table className="caption-top">
-      <TableCaption className="font-semibold text-lg">
+      <TableCaption className="font-semibold text-lg mb-2">
         Recent invoices
       </TableCaption>
       <TableHeader>

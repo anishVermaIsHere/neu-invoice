@@ -3,6 +3,7 @@ import { InvoiceTable } from "@/components/invoice/invoice-table";
 import DashboardLayout from "@/components/dashboard/dashboard-layout";
 import CreateInvoiceButton from "@/components/invoice/create-invoice-button";
 
+
 const InvoicePage = () => {
   return (
     <DashboardLayout>
