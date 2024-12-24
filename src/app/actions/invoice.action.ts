@@ -6,7 +6,7 @@ import { formatCurrency } from "@/shared/utils";
 import { CurrencyType } from "@/interfaces";
 import { mailtrapClient } from "@/config/mailtrap.config";
 import AppConfig from "@/config/app.config";
-import { addInvoice, markedAsPaid, updateInvoice } from "@/lib/prisma/utils";
+import { addInvoice, markedAsPaid, updateInvoice, deleteInvoice } from "@/lib/prisma/utils";
 
 
 
@@ -17,7 +17,7 @@ const sender = {
   name: AppConfig.mailTrap.senderName,
 };
 
-export async function createInvoice(prevState: any, formData: FormData) {
+export async function createInvoice(prevState: any, formData: FormData) {  
   const submission = parseWithZod(formData, {
     schema: invoiceSchema,
   });
@@ -92,4 +92,8 @@ export async function editInvoice(prevState: any, formData: FormData) {
 
 export const markedInvoiceAsPaid = async (invoiceId: string) => {
     await markedAsPaid(invoiceId);
+};
+
+export const invoiceDelete = async (invoiceId: string) => {
+  await deleteInvoice(invoiceId);
 };

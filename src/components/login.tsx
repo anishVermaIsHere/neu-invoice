@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/auth";
@@ -14,15 +7,15 @@ import Image from "next/image";
 
 
 export function Login() {
-  const handleSubmit = async (formdata: FormData) => {
+  const continueWithEmail = async (formdata: FormData) => {
     "use server";
     await signIn("nodemailer", { email: formdata.get("email") as string });
   };
 
-  // const handleSubmit = async () => {
-  //   "use server";
-  //   await signIn('google');
-  // };
+  const continueWithGoogle = async () => {
+    "use server";
+    await signIn('google');
+  };
 
   return (
     <Card className="w-[350px]">
@@ -44,7 +37,8 @@ export function Login() {
           Submit your email and it sent a login link to your email
         </CardDescription>
       </CardHeader>
-      <form action={handleSubmit}>
+      <form action={continueWithEmail}>
+        <div>
         <CardContent>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
@@ -63,6 +57,22 @@ export function Login() {
             Continue
           </Button>
         </CardFooter>
+        </div>
+      </form>
+      <form action={continueWithGoogle}>
+        <div>
+        <CardContent>
+          <div className="text-center text-muted-foreground gap-4">
+            or
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button type="submit" className="w-full">
+            Continue with Google
+          </Button>
+        </CardFooter>
+        </div>
+        
       </form>
     </Card>
   );

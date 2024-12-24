@@ -15,6 +15,7 @@ import { getInvoices } from "@/lib/prisma/utils";
 import { getAuth } from "@/auth";
 import { formatCurrency } from "@/shared/utils";
 import Empty from "../ui/empty";
+import { CurrencyType } from "@/interfaces";
 
 const invoiceStatus = (status: string) => {
   switch (status?.toLowerCase()) {
@@ -70,7 +71,12 @@ export async function InvoiceTable() {
             <TableCell>{format(invoice?.date, "dd/MM/yyyy")}</TableCell>
             <TableCell>{invoice?.quantity}</TableCell>
             <TableCell>{invoice?.rate}</TableCell>
-            <TableCell className="text-right">{invoice?.total}</TableCell>
+            <TableCell className="text-right">
+            {formatCurrency({
+              amount: invoice?.total,
+              currency: invoice?.currency as CurrencyType,
+            })}
+            </TableCell>
             <TableCell>{format(invoice?.dueDate, "dd/MM/yyyy")}</TableCell>
             <TableCell className="text-center">
               {invoiceStatus(invoice?.status)}
@@ -86,13 +92,12 @@ export async function InvoiceTable() {
       </TableBody>
       <TableFooter>
         <TableRow className="bg-white">
-          <TableCell colSpan={5} className="font-semibold">
+          <TableCell colSpan={6} className="font-semibold">
             Total
           </TableCell>
           <TableCell className="text-right font-semibold">
             {formatCurrency({
               amount: grandTotal,
-              currency: "USD",
             })}
           </TableCell>
         </TableRow>

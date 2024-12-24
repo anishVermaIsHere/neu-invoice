@@ -9,10 +9,14 @@ import {
 import Link from "next/link";
 import { Icons } from "../ui/icons";
 import toast from "react-hot-toast";
-import { markedInvoiceAsPaid } from "@/app/actions/invoice.action";
-import { ActionAlert } from "./action-alert";
+import { markedInvoiceAsPaid, invoiceDelete } from "@/app/actions/invoice.action";
+import { ActionAlert } from "./alert-modal";
+import { useState } from "react";
+import useAppStore from "@/store/app.store";
 
 const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
+  const { setIsDialog, setDialogConfirm, resetDialog } = useAppStore((s) => s);
+
   const handleSendReminder = () => {
     toast.promise(
       fetch(`/api/email/${id}`, {
@@ -30,10 +34,34 @@ const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
   };
 
   const markedAsPaid = () => {
-    markedInvoiceAsPaid(id).then(() => {
-      toast.success("Marked as paid");
+    setDialogConfirm(() => {
+      toast.promise(
+        markedInvoiceAsPaid(id),
+        {
+          loading: "Wait...",
+          success: <span>Marked as paid successfully!</span>,
+          error: <span>Marked as paid failed.</span>,
+        }
+      );
+      resetDialog();
     });
+    setIsDialog(true);
   };
+
+  const handleDeleteInvoice = ()=>{
+    setDialogConfirm(() => {
+      toast.promise(
+        invoiceDelete(id),
+        {
+          loading: "Wait...",
+          success: <span>Invoice deleted successfully!</span>,
+          error: <span>Invoice deletion failed.</span>,
+        }
+      );
+      resetDialog();
+    });
+    setIsDialog(true);
+  }
 
   return (
     <DropdownMenu>
@@ -43,33 +71,30 @@ const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/invoices/${id}/edit`}>
-            <Icons.pencil className="size-4 mr-2" /> Edit Invoice
-          </Link>
-        </DropdownMenuItem>
+        {status !== "PAID" && (
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/invoices/${id}`}>
+              <Icons.pencil className="size-4 mr-2" /> Edit Invoice
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link href={`/api/invoice/${id}`} target="_blank">
             <Icons.downloadcloud className="size-4 mr-2" /> Download Invoice
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSendReminder}>
-          <Icons.mail className="size-4 mr-2" /> Reminder Email
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/invoices/${id}/delete`}>
+        {status !== "PAID" && (
+          <DropdownMenuItem onClick={handleSendReminder}>
+            <Icons.mail className="size-4 mr-2" /> Reminder Email
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuItem onClick={handleDeleteInvoice}>
             <Icons.trash className="size-4 mr-2" /> Delete Invoice
-          </Link>
         </DropdownMenuItem>
         {status !== "PAID" && (
-            <ActionAlert
-              toggleButton={
-                <DropdownMenuItem>
-                  <Icons.circlecheck className="size-4 mr-2" /> Mark as Paid
-                </DropdownMenuItem>
-              }
-              continueHandler={markedAsPaid}
-            />
+          <DropdownMenuItem onClick={markedAsPaid}>
+            <Icons.circlecheck className="size-4 mr-2" /> Mark as Paid
+          </DropdownMenuItem>
         )}
       </DropdownMenuContent>
     </DropdownMenu>

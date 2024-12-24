@@ -12,7 +12,7 @@ type CurrencyType = "INR" | "USD";
 
 interface ICurrency {
     amount: number;
-    currency: CurrencyType;
+    currency?: CurrencyType;
 }
 
 

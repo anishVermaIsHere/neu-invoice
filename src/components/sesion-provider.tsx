@@ -1,25 +1,26 @@
-'use client';
+"use client";
 
 import { useEffect } from "react";
 import useAuthStore from "@/store/auth.store";
+import { User } from "@/store/auth.store";
 
-const SessionProvider = ({ session }: { session: any }) => {
+const SessionProvider = ({ sessionUser }: { sessionUser: User }) => {
   const { setUser } = useAuthStore();
 
   useEffect(() => {
-    if (session) {
-      setUser({ 
-        id: session?.user?.id,
-        firstName: session?.user?.firstName,
-        lastName: session?.user?.lastName,
-        email: session?.user?.email,
-        address: session?.user?.address,
-        image: session?.user?.image
-    })
+    if (sessionUser) {
+      setUser({
+        id: sessionUser?.id,
+        firstName: sessionUser?.firstName,
+        lastName: sessionUser?.lastName,
+        email: sessionUser?.email,
+        address: sessionUser?.address,
+        image: sessionUser?.image,
+      });
     }
-  }, [session]);
+  }, [sessionUser]);
 
-  return null; 
+  return null;
 };
 
 export default SessionProvider;

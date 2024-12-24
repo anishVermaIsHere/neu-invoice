@@ -1,28 +1,28 @@
 import { ReactNode } from "react";
 import Aside from "./aside";
 import MobileSidebar from "./mobile-sidebar";
-import { getAuth } from "@/auth";
 import MainContainer from "../common/main";
 import ToggleSidebarButton from "./navbar/toggle-sidebar-button";
 import { Input } from "../ui/input";
-import { findUser } from "@/lib/prisma/utils";
 import { redirect } from "next/navigation";
 import SessionProvider from "../sesion-provider";
-
+import { User } from "@prisma/client";
+import { getAuth } from "@/auth";
+import { AlertModal } from "../invoice/alert-modal";
 
 
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {
-  const session = await getAuth();
-  const user = await findUser(session?.user?.id as string);
+
+  const user = (await getAuth())?.user as User;
 
   if(!user) redirect('/login')
-  if (!user?.firstName || !user.lastName || !user.address) redirect("/onboarding");
+  if (!user?.firstName || !user?.lastName || !user?.address) redirect("/onboarding");
 
 
   return (
     <MainContainer classes="flex">
-      <SessionProvider session={session}/>
+      <SessionProvider sessionUser={user}/>
       <Aside />
       <div className="p-2 w-full">
         <nav className="flex items-center justify-between mb-4 p-1">
@@ -30,7 +30,7 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
             <MobileSidebar />
             <ToggleSidebarButton />
             <h4 className="text-xl font-semibold">
-              Hello {session?.user?.firstName || "User"}!
+              Hello {user?.firstName || "User"}!
             </h4>
           </div>
 
@@ -41,6 +41,7 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
 
         <div className="">{children}</div>
       </div>
+      <AlertModal />
     </MainContainer>
   );
 };

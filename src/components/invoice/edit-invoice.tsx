@@ -26,15 +26,11 @@ import { editInvoice } from "@/app/actions/invoice.action";
 import { Icons } from "../ui/icons";
 import { CurrencyType } from "@/interfaces";
 import { currencies } from "@/shared/data";
-import { Prisma } from "@prisma/client";
+import { Invoice } from "@prisma/client";
 
 
 
-type EditInvoiceFormPropsType = {
-    invoiceData: Prisma.InvoiceGetPayload<{}>
-}
-
-export default function EditInvoiceForm({ invoiceData }: EditInvoiceFormPropsType) {
+export default function EditInvoiceForm({ invoiceData }: { invoiceData: Invoice }) {
   const [lastResult, action] = useActionState(editInvoice, undefined);
   const [form, fields] = useForm({
     lastResult,

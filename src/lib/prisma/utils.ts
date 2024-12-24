@@ -1,10 +1,12 @@
 import { prisma } from "./db";
 import { getAuth } from "@/auth";
 import { InvoiceType, OnboardUserType } from "@/interfaces";
+import { User } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 
 
-const session = await getAuth();
+const user = (await getAuth())?.user as User;
 
 const findUser = async (userId: string) => {
     try {
@@ -29,7 +31,7 @@ const updateUser = async (userId:string, user: OnboardUserType) => {
     try {
         return await prisma.user.update({
             where: {
-              id: session?.user?.id,
+              id: userId,
             },
             data: {
               firstName: user.firstName,
@@ -78,6 +80,7 @@ const getInvoice = async (invoiceId: string) => {
         return await prisma.invoice.findUnique({
             where: {
                 id: invoiceId,
+                userId: user?.id
               },
               select: {
                 id: true,
@@ -108,7 +111,6 @@ const getInvoice = async (invoiceId: string) => {
 
 const addInvoice = async (invoice: InvoiceType) => {
     try {
-        const session = await getAuth();
         return await prisma.invoice.create({
             data: {
               clientAddress: invoice.clientAddress,
@@ -128,7 +130,7 @@ const addInvoice = async (invoice: InvoiceType) => {
               status: invoice.status,
               total: invoice.total,
               note: invoice.note,
-              userId: session?.user?.id,
+              userId: user?.id,
             },
           });
         
@@ -141,8 +143,8 @@ const updateInvoice = async (invoiceId: string, invoice: InvoiceType) => {
     try {
         return await prisma.invoice.update({
             where: {
-              id: invoiceId as string,
-              userId: session?.user?.id,
+              id: invoiceId,
+              userId: user?.id,
             },
             data: {
               clientAddress: invoice.clientAddress,
@@ -170,18 +172,32 @@ const updateInvoice = async (invoiceId: string, invoice: InvoiceType) => {
     }
 }
 
+const deleteInvoice = async (invoiceId: string)=>{
+    try {
+        await prisma.invoice.delete({
+            where: {
+                id: invoiceId,
+                userId: user?.id,
+            }
+        });
+        return revalidatePath('/dashboard/invoices');
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}
 
 const markedAsPaid = async (invoiceId: string) => {
     try {
-        return await prisma.invoice.update({
+        await prisma.invoice.update({
             where: {
                 id: invoiceId,
-                userId: session?.user?.id as string,
+                userId: user?.id,
             },
             data: {
                 status: "PAID"
             }
         });
+        return revalidatePath('/dashboard/invoices');
     } catch (error: any) {
         throw new Error(error.message);
     }
@@ -195,5 +211,6 @@ export {
     getInvoice,
     addInvoice,
     updateInvoice,
+    deleteInvoice,
     markedAsPaid
 }
