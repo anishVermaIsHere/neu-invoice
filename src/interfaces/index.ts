@@ -1,11 +1,15 @@
 import { invoiceSchema, onboardingSchema } from "@/shared/schemas";
+import { LucideProps } from "lucide-react";
 import { TypeOf } from "zod";
 
 
 interface IDashCard {
     id: string;
     title: string;
+    description: string;
+    value: number;
     link: string;
+    icon: (props: LucideProps) => JSX.Element;
 };
 
 type CurrencyType = "INR" | "USD";

@@ -2,7 +2,8 @@ import Section from "@/components/common/section";
 import { InvoiceTable } from "@/components/invoice/invoice-table";
 import DashboardLayout from "@/components/dashboard/dashboard-layout";
 import CreateInvoiceButton from "@/components/invoice/create-invoice-button";
-
+import { Suspense } from "react";
+import Spinner from "@/components/ui/spinner";
 
 const InvoicePage = () => {
   return (
@@ -12,7 +13,9 @@ const InvoicePage = () => {
         <div className="flex items-center">
           <CreateInvoiceButton />
         </div>
-        <InvoiceTable />
+        <Suspense fallback={<Spinner />}>
+          <InvoiceTable />
+        </Suspense>
       </Section>
     </DashboardLayout>
   );

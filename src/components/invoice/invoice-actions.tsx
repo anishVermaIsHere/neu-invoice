@@ -10,9 +10,8 @@ import Link from "next/link";
 import { Icons } from "../ui/icons";
 import toast from "react-hot-toast";
 import { markedInvoiceAsPaid, invoiceDelete } from "@/app/actions/invoice.action";
-import { ActionAlert } from "./alert-modal";
-import { useState } from "react";
 import useAppStore from "@/store/app.store";
+
 
 const InvoiceActions = ({ id, status }: { id: string; status: string }) => {
   const { setIsDialog, setDialogConfirm, resetDialog } = useAppStore((s) => s);

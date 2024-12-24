@@ -17,6 +17,7 @@ import { formatCurrency } from "@/shared/utils";
 import Empty from "../ui/empty";
 import { CurrencyType } from "@/interfaces";
 
+
 const invoiceStatus = (status: string) => {
   switch (status?.toLowerCase()) {
     case "paid":

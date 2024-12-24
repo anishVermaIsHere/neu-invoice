@@ -204,6 +204,26 @@ const markedAsPaid = async (invoiceId: string) => {
 
 }
 
+const getDashboardData = async(userId: string)=>{
+    try {
+        return await prisma.invoice.findMany({
+            where:{
+                userId: userId,
+            },
+            select: {
+                id: true,
+                quantity: true,
+                total: true,
+                status: true,
+                currency: true,
+                createdAt: true,
+            }
+        })
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
 export {
     findUser,
     updateUser,
@@ -212,5 +232,6 @@ export {
     addInvoice,
     updateInvoice,
     deleteInvoice,
-    markedAsPaid
+    markedAsPaid,
+    getDashboardData
 }

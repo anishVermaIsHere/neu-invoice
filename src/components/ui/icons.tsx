@@ -28,6 +28,7 @@ import {
   Receipt,
   ReceiptText,
   ScrollText,
+  Rows4,
   type XIcon as LucideIcon,
 } from "lucide-react";
 
@@ -62,5 +63,6 @@ export const Icons = {
   receiptdollar: (props: LucideProps) => <Receipt {...props} />,
   receipttext: (props: LucideProps) => <ReceiptText {...props} />,
   report: (props: LucideProps) => <ScrollText {...props} />,
+  rows: (props: LucideProps) => <Rows4 {...props} />,
 
 };
