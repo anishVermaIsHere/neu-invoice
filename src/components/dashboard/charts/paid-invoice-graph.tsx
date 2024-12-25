@@ -4,19 +4,18 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 
 
 type InvoiceGraphPropsType = {
-  data: {
     date: string;
     amount: number;
-  }[];
-};
+}[];
 
 
-const InvoiceGraph = ({ data }: { data: InvoiceGraphPropsType }) => {
+const PaidInvoiceGraph = ({ data }: { data: InvoiceGraphPropsType }) => {
+
   return (
     <ChartContainer
       config={{
@@ -28,20 +27,20 @@ const InvoiceGraph = ({ data }: { data: InvoiceGraphPropsType }) => {
       className="min-h-[300px]"
     >
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+        <LineChart data={data}>
           <XAxis dataKey="date" />
           <YAxis />
           <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
-          <Bar
+          <Line
             type="monotone"
             dataKey="amount"
-            stroke="var(--color-amount)"
+            stroke="hsl(var(--chart-1))"
             strokeWidth={2}
           />
-        </BarChart>
+        </LineChart>
       </ResponsiveContainer>
     </ChartContainer>
   )
 }
 
-export default InvoiceGraph
+export default PaidInvoiceGraph

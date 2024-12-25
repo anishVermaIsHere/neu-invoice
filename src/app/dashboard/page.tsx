@@ -4,7 +4,11 @@ import { redirect } from "next/navigation";
 import { getAuth } from "@/auth";
 import { getDashboardData } from "@/lib/prisma/utils";
 import { Icons } from "@/components/ui/icons";
-import InvoiceGraph from "@/components/dashboard/charts/invoice-graph";
+import GraphSection from "@/components/dashboard/charts/graph-section";
+import Empty from "@/components/ui/empty";
+import LinkElement from "@/components/ui/link";
+import { RecentInvoices } from "@/components/dashboard/recent-invoices";
+import Section from "@/components/common/section";
 
 const DashboardPage = async () => {
   const session = await getAuth();
@@ -13,14 +17,14 @@ const DashboardPage = async () => {
     redirect("/login");
   }
 
-  const invoices = await getDashboardData(session?.user?.id);
+  const { total, paid, unpaid } = await getDashboardData(session?.user?.id);
 
   const dashboardCards = [
     {
       id: `nS6bapRc-PP85up-xFojv`,
       title: "Total revenue",
       description: "Invoices amount",
-      value: invoices.reduce((acc, curr) => acc + curr.total, 0),
+      value: total.reduce((acc, curr) => acc + curr.total, 0) || 0,
       link: "",
       icon: Icons.receiptdollar,
     },
@@ -28,7 +32,7 @@ const DashboardPage = async () => {
       id: `MFpMNW3WxRuJfNKNACsUS`,
       title: "Total invoices",
       description: "Issued invoices",
-      value: invoices.length,
+      value: total?.length || 0,
       link: "",
       icon: Icons.receipttext,
     },
@@ -36,7 +40,7 @@ const DashboardPage = async () => {
       id: `fESkBROFGeX-uVn_zBXXK`,
       title: "Total paid",
       description: "Invoices have been paid",
-      value: invoices.filter((d) => d.status === "PAID").length,
+      value: paid?.length || 0,
       link: "",
       icon: Icons.creditcard,
     },
@@ -44,7 +48,7 @@ const DashboardPage = async () => {
       id: `DOb6Ew8nFIsSVrX-AXEqk`,
       title: "Total dues",
       description: "Unpaid invoices",
-      value: invoices.filter((d) => d.status === "PENDING").length,
+      value: unpaid?.length || 0,
       link: "",
       icon: Icons.rows,
     },
@@ -52,16 +56,31 @@ const DashboardPage = async () => {
 
   return (
     <DashboardLayout>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {dashboardCards.map((dcard) => (
-          <DashCard key={dcard.id} {...dcard} />
-        ))}
-      </div>
+      {total?.length ? (
+        <>
+          <Section classes="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
+            {dashboardCards.map((dcard) => (
+              <DashCard key={dcard.id} {...dcard} />
+            ))}
+          </Section>
 
-      <div className="grid gap-4 lg:grid-cols-3 md:gap-8">
-        <InvoiceGraph />
-        {/* <RecentInvoices /> */}
-      </div>
+          <Section classes="grid grid-cols-1 gap-4 xl:grid-cols-3 mb-4">
+            <GraphSection />
+          </Section>
+
+          <Section>
+            <RecentInvoices />
+          </Section>
+        </>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <Empty message="No invoices, first create" />
+          <LinkElement href="/dashboard/invoices/create" classes="">
+            <Icons.plus className="size-4" />
+            Create
+          </LinkElement>
+        </div>
+      )}
     </DashboardLayout>
   );
 };

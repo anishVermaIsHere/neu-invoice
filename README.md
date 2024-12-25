@@ -6,4 +6,5 @@ This application streamlines invoice creation for clients and facilitates easy s
 ![Invoice App](logo.png)
 
 ![Home page](001.png)
-![Invoices page](002.png)
+![Dashboard page](002.png)
+![Invoices page](003.png)

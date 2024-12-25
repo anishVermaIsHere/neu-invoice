@@ -26,31 +26,30 @@ export async function createInvoice(prevState: any, formData: FormData) {
     return submission.reply();
   }
 
- const invoice = await addInvoice(submission.value);
+  const invoice = await addInvoice(submission.value);
 
   const totalAmount = formatCurrency({
     amount: invoice.total,
     currency: invoice.currency as CurrencyType,
   });
 
-  mailtrapClient.send({
-    from: sender,
-    to: [{ email: invoice.clientEmail }],
-    template_uuid: "794e66aa-d559-469d-9730-f6ce99a991e9",
-    template_variables: {
-      clientName: invoice.clientName,
-      invoiceNumber: invoice.invoiceNumber,
-      invoiceDate: new Intl.DateTimeFormat("en-US", {
-        dateStyle: "long",
-      }).format(new Date(submission.value.date)),
-      invoiceAmount: totalAmount,
-      invoiceTotal: totalAmount,
-      supportEmail: AppConfig.mailTrap.supportEmail,
-      companyName: `${AppConfig.appName} Invoice`
-    },
-  });
 
-  return redirect("/dashboard/invoices");
+  // mailtrapClient.send({
+  //   from: sender,
+  //   to: [{ email: invoice.clientEmail }],
+  //   template_uuid: "794e66aa-d559-469d-9730-f6ce99a991e9",
+  //   template_variables: {
+  //     clientName: invoice.clientName,
+  //     invoiceNumber: invoice.invoiceNumber,
+  //     invoiceDate: new Intl.DateTimeFormat("en-US", {
+  //       dateStyle: "long",
+  //     }).format(new Date(submission.value.date)),
+  //     invoiceAmount: totalAmount,
+  //     invoiceTotal: totalAmount,
+  //     supportEmail: AppConfig.mailTrap.supportEmail,
+  //     companyName: `${AppConfig.appName} Invoice`
+  //   },
+  // });
 }
 
 

@@ -3,7 +3,6 @@ import Aside from "./aside";
 import MobileSidebar from "./mobile-sidebar";
 import MainContainer from "../common/main";
 import ToggleSidebarButton from "./navbar/toggle-sidebar-button";
-import { Input } from "../ui/input";
 import { redirect } from "next/navigation";
 import SessionProvider from "../sesion-provider";
 import { User } from "@prisma/client";
@@ -32,10 +31,6 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
             <h4 className="text-xl font-semibold">
               Hello {user?.firstName || "User"}!
             </h4>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Input type="search" className="w-full sm:w-[350px]" placeholder="Search invoices..."/>
           </div>
         </nav>
 

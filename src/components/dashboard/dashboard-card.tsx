@@ -26,7 +26,7 @@ const DashCard = (dcard: IDashCard) => {
 
   return (
     <Link href={link}>
-      <Card className="w-full">
+      <Card className="w-full bg-gray-50">
         <CardHeader>
           <CardTitle className="flex justify-between items-center text-muted-foreground">
             <div className="text-lg">{title ? title : "Title"}</div>

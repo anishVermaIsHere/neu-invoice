@@ -4,7 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 model User {
@@ -100,10 +101,12 @@ model Invoice {
   currency      String
   invoiceNumber Int
   note          String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  User          User?         @relation(fields: [userId], references: [id])
+  userId        String?
+
+  // @@fulltext([name, description, quantity, rate, clientName, clientEmail, clientAddress, invoiceNumber])
 }
 
 enum InvoiceStatus {

@@ -43,6 +43,7 @@ export async function InvoiceTable() {
   const grandTotal = invoices.reduce((a, p) => a + p.total, 0);
 
   return invoices.length ? (
+    <>
     <Table className="caption-top">
       <TableCaption className="font-semibold text-lg mb-2">
         Recent invoices
@@ -104,7 +105,7 @@ export async function InvoiceTable() {
         </TableRow>
       </TableFooter>
     </Table>
-    
+    </>
   ) : (
     <Empty message="No invoices" />
   );

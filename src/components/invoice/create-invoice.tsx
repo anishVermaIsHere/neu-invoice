@@ -33,6 +33,7 @@ import useAuthStore from "@/store/auth.store";
 export default function CreateInvoiceForm() {
   const { user: { firstName, lastName, email, address} } = useAuthStore(s=>s); 
   const [lastResult, action] = useActionState(createInvoice, undefined);
+  
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -40,7 +41,6 @@ export default function CreateInvoiceForm() {
         schema: invoiceSchema,
       });
     },
-
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput"
   });
@@ -58,7 +58,6 @@ export default function CreateInvoiceForm() {
   const calculateTotal = (Number(invoiceValues.quantity) || 0) * (Number(invoiceValues.rate) || 0);
 
   const handleChange = (key: string, value: string | Date | undefined) => {
-    console.log('values', invoiceValues)
     setInvoiceValues((prev) => ({ ...prev, [key]: value }));
   };
 

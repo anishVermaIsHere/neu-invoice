@@ -30,6 +30,7 @@ import {
   ScrollText,
   Rows4,
   type XIcon as LucideIcon,
+  Search,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -64,5 +65,6 @@ export const Icons = {
   receipttext: (props: LucideProps) => <ReceiptText {...props} />,
   report: (props: LucideProps) => <ScrollText {...props} />,
   rows: (props: LucideProps) => <Rows4 {...props} />,
+  search: (props: LucideProps) => <Search {...props} />,
 
 };
