@@ -16,7 +16,7 @@ const Aside = () => {
 
   return (
     isSidebar && (
-      <aside className="hidden md:flex p-2 flex-col justify-between min-w-[250px] max-w-[300px] min-h-screen border-r">
+      <aside className="p-2 hidden md:flex flex-col justify-between min-w-[250px] max-w-[300px] min-h-screen border-r">
         <div className="flex items-center py-2">
           <Link href="/" className="mx-auto">
             <Image src="/neu-invoice.png" alt="logo" width={120} height={100} />

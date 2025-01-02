@@ -31,6 +31,7 @@ import {
   Rows4,
   type XIcon as LucideIcon,
   Search,
+  Smile,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -66,5 +67,6 @@ export const Icons = {
   report: (props: LucideProps) => <ScrollText {...props} />,
   rows: (props: LucideProps) => <Rows4 {...props} />,
   search: (props: LucideProps) => <Search {...props} />,
+  smile: (props: LucideProps) => <Smile {...props} />
 
 };

@@ -8,13 +8,12 @@ import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 
 
-type InvoiceGraphPropsType = {
-    date: string;
-    amount: number;
-}[];
+type PaidInvoiceGraphPropsType = {
+  data: { date: string; amount: number; }[],
+};
 
 
-const PaidInvoiceGraph = ({ data }: { data: InvoiceGraphPropsType }) => {
+const PaidInvoiceGraph = ({ data } : PaidInvoiceGraphPropsType) => {
 
   return (
     <ChartContainer
@@ -34,7 +33,7 @@ const PaidInvoiceGraph = ({ data }: { data: InvoiceGraphPropsType }) => {
           <Line
             type="monotone"
             dataKey="amount"
-            stroke="hsl(var(--chart-1))"
+            stroke="var(--chart-1)"
             strokeWidth={2}
           />
         </LineChart>

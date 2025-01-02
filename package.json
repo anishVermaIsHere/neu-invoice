@@ -1,7 +1,12 @@
 {
   "name": "neu-invoice",
+  "description": "send invoice to clients",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Anish",
+    "github": "https://github.com/anishVermaIsHere"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

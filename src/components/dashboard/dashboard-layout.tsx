@@ -1,8 +1,6 @@
 import { ReactNode } from "react";
 import Aside from "./aside";
-import MobileSidebar from "./mobile-sidebar";
 import MainContainer from "../common/main";
-import ToggleSidebarButton from "./navbar/toggle-sidebar-button";
 import { redirect } from "next/navigation";
 import SessionProvider from "../sesion-provider";
 import { User } from "@prisma/client";
@@ -20,21 +18,11 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
 
 
   return (
-    <MainContainer classes="flex">
+    <MainContainer classes="flex h-screen">
       <SessionProvider sessionUser={user}/>
       <Aside />
-      <div className="p-2 w-full">
-        <nav className="flex items-center justify-between mb-4 p-1">
-          <div className="flex items-center gap-3">
-            <MobileSidebar />
-            <ToggleSidebarButton />
-            <h4 className="text-xl font-semibold">
-              Hello {user?.firstName || "User"}!
-            </h4>
-          </div>
-        </nav>
-
-        <div className="">{children}</div>
+      <div className="p-2 overflow-hidden overflow-y-auto h-screen w-full">
+        <div>{children}</div>
       </div>
       <AlertModal />
     </MainContainer>

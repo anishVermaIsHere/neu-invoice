@@ -37,10 +37,11 @@ const invoiceStatus = (status: string) => {
   }
 };
 
-export async function InvoiceTable() {
+export async function InvoiceTable({ startDate, endDate }: { startDate: string, endDate: string }) {
   const session = await getAuth();
-  const invoices = await getInvoices(session?.user?.id as string);
+  const invoices = await getInvoices(session?.user?.id as string, startDate, endDate);
   const grandTotal = invoices.reduce((a, p) => a + p.total, 0);
+
 
   return invoices.length ? (
     <>

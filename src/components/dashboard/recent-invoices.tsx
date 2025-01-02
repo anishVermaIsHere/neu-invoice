@@ -17,7 +17,7 @@ export async function RecentInvoices() {
       <CardContent className="flex flex-col gap-4">
         {data.map((item) => (
           <div className="flex items-center gap-4" key={item.id}>
-            <Avatar className="hidden sm:flex size-9 text-[hsl(var(--chart-1))]">
+            <Avatar className="hidden sm:flex size-9 text-[var(--chart-1)]">
               <AvatarFallback>{item.clientName.slice(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1 truncate">

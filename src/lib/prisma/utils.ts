@@ -3,8 +3,11 @@ import { getAuth } from "@/auth";
 import { InvoiceType, OnboardUserType } from "@/interfaces";
 import { User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { getStartEndDates } from "@/shared/utils";
+
 
 const user = (await getAuth())?.user as User;
+const dates = getStartEndDates();
 
 const findUser = async (userId: string) => {
   try {
@@ -63,15 +66,24 @@ const findInvoices = async (userId: string, query: string) => {
 
 const getInvoices = async (
   userId: string,
+  startDate: Date | string = dates.startDate,
+  endDate: Date | string = dates.endDate,
   limit: number = 25,
-  skip: number = 0
+  skip: number = 0,
 ) => {
   try {
+    startDate = new Date(startDate.toString());
+    endDate = new Date(endDate.toString());
+
     return prisma.invoice.findMany({
       take: limit,
       skip,
       where: {
         userId: userId,
+        date: {
+          gte: startDate,
+          lt: endDate,
+        }
       },
       select: {
         id: true,
@@ -222,12 +234,19 @@ const markedAsPaid = async (invoiceId: string) => {
   }
 };
 
-const getDashboardData = async (userId: string) => {
+const getDashboardData = async (userId: string, startDate: Date | string = dates.startDate, endDate: Date | string = dates.endDate) => {
   try {
+    startDate = new Date(startDate.toString());
+    endDate = new Date(endDate.toString());
+  
     const [total, paid, unpaid] = await Promise.all([
       prisma.invoice.findMany({
         where: {
           userId: userId,
+          date: {
+            gte: startDate,
+            lte: endDate
+          },
         },
         select: {
           total: true,
@@ -237,6 +256,10 @@ const getDashboardData = async (userId: string) => {
         where: {
           userId: userId,
           status: "PAID",
+          date: {
+            gte: startDate,
+            lte: endDate
+          },
         },
         select: {
           id: true,
@@ -246,6 +269,10 @@ const getDashboardData = async (userId: string) => {
         where: {
           userId: userId,
           status: "PENDING",
+          date: {
+            gte: startDate,
+            lte: endDate
+          },
         },
         select: {
           id: true,
@@ -263,16 +290,23 @@ const getDashboardData = async (userId: string) => {
   }
 };
 
-const getPaidInvoices = async (userId: string) => {
+const getPaidInvoices = async (userId: string, startDate: Date | string = dates.startDate, endDate: Date | string = dates.endDate) => {
   try {
+    startDate = new Date(startDate.toString()) || new Date();
+    endDate = new Date(endDate.toString()) || new Date();
+
     const paidInvoices = await prisma.invoice.findMany({
       where: {
         status: "PAID",
         userId: userId,
-        createdAt: {
-          lte: new Date(),
-          gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
-        },
+        date: {
+          gte: startDate,
+          lte: endDate
+        }
+        // createdAt: {
+        //   lte: new Date(),
+        //   gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+        // },
       },
       select: {
         createdAt: true,
