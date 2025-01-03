@@ -9,6 +9,9 @@ const Footer = () => {
             <span className="me-2">Copyright © {new Date().getFullYear()}.</span>
             <span>{AppConfig.appName} Invoice</span>
           </div>
+
+          <span>Designed and Developed by Anish</span>
+
           <span>{format(new Date(), "PP HH:mm")}</span>
       </div>
     </footer>

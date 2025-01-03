@@ -8,14 +8,15 @@ import { CurrencyType } from "@/interfaces";
 
 export async function RecentInvoices() {
   const session = await getAuth();
-  const data = await getInvoices(session?.user?.id as string, 7);
+  const data = await getInvoices(session?.user?.id as string);
+  
   return (
     <Card>
       <CardHeader>
         <CardTitle>Recent Invoices</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        {data.map((item) => (
+        {data.slice(0, 7).map((item) => (
           <div className="flex items-center gap-4" key={item.id}>
             <Avatar className="hidden sm:flex size-9 text-[var(--chart-1)]">
               <AvatarFallback>{item.clientName.slice(0, 2)}</AvatarFallback>

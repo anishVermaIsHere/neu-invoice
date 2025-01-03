@@ -4,6 +4,4 @@ This application streamlines invoice creation for clients and facilitates easy s
 
 
 
-![Home page](001.png)
-![Dashboard page](002.png)
-![Invoices page](003.png)
+![Neu Invoice](screenshot.jpg)

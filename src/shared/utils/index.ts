@@ -17,7 +17,7 @@ const getDateOfPrevMonth = (currentDate: Date | string) => {
   return endOfMonth(prevMonDays);
 };
 
-const getStartEndDates = (numberOfDays: number = 30) => ({
+const getStartEndDates = (numberOfDays: number = 180) => ({
   startDate: subDays(new Date(), numberOfDays),
   endDate: new Date(),
 });
