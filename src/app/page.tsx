@@ -1,8 +1,6 @@
 import Layout from "@/components/common/layout";
 import LinkElement from "@/components/ui/link";
-import Image from "next/image";
 export default async function Home() {
-
   return (
     <Layout>
         <div className="flex flex-col justify-center min-h-screen">

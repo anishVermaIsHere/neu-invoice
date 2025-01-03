@@ -22,9 +22,9 @@ const findUser = async (userId: string) => {
         email: true,
       },
     });
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error finding user: ${(error as Error).message}`);
+  } 
 };
 
 const updateUser = async (userId: string, user: OnboardUserType) => {
@@ -39,30 +39,30 @@ const updateUser = async (userId: string, user: OnboardUserType) => {
         address: user.address,
       },
     });
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error updating user: ${(error as Error).message}`);
+  } 
 };
 
-const findInvoices = async (userId: string, query: string) => {
-  try {
-    // await prisma.invoice.findMany({
-    //   where: {
-    //     userId: userId,
-    //     invoiceNumber:{
-    //         search: query
-    //     }
-    //   },
-    // });
+// const findInvoices = async (userId: string, query: string) => {
+//   try {
+//     // await prisma.invoice.findMany({
+//     //   where: {
+//     //     userId: userId,
+//     //     invoiceNumber:{
+//     //         search: query
+//     //     }
+//     //   },
+//     // });
 
-    //     return await prisma.$queryRaw`
-    //     SELECT * FROM "Invoice"
-    //     WHERE to_tsvector('english', "clientName") @@ to_tsquery('english', ${query});
-    //   `;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
+//     //     return await prisma.$queryRaw`
+//     //     SELECT * FROM "Invoice"
+//     //     WHERE to_tsvector('english', "clientName") @@ to_tsquery('english', ${query});
+//     //   `;
+//   } catch (error: any) {
+//     throw new Error(error.message);
+//   }
+// };
 
 const getInvoices = async (
   userId: string,
@@ -103,9 +103,9 @@ const getInvoices = async (
         createdAt: "desc"
       },
     });
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error fetching invoices: ${(error as Error).message}`);
+  } 
 };
 
 const getInvoice = async (invoiceId: string) => {
@@ -137,9 +137,9 @@ const getInvoice = async (invoiceId: string) => {
         createdAt: true,
       },
     });
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error fetching invoice: ${(error as Error).message}`);
+  } 
 };
 
 const addInvoice = async (invoice: InvoiceType) => {
@@ -166,9 +166,9 @@ const addInvoice = async (invoice: InvoiceType) => {
         userId: user?.id,
       },
     });
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error creating invoice: ${(error as Error).message}`);
+  } 
 };
 
 const updateInvoice = async (invoiceId: string, invoice: InvoiceType) => {
@@ -198,9 +198,9 @@ const updateInvoice = async (invoiceId: string, invoice: InvoiceType) => {
         note: invoice.note,
       },
     });
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error updating invoice: ${(error as Error).message}`);
+  } 
 };
 
 const deleteInvoice = async (invoiceId: string) => {
@@ -212,9 +212,9 @@ const deleteInvoice = async (invoiceId: string) => {
       },
     });
     return revalidatePath("/dashboard/invoices");
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error deleting invoice: ${(error as Error).message}`);
+  } 
 };
 
 const markedAsPaid = async (invoiceId: string) => {
@@ -229,9 +229,9 @@ const markedAsPaid = async (invoiceId: string) => {
       },
     });
     return revalidatePath("/dashboard/invoices");
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error updating as paid invoice: ${(error as Error).message}`);
+  } 
 };
 
 const getDashboardData = async (userId: string, startDate: Date | string = dates.startDate, endDate: Date | string = dates.endDate) => {
@@ -285,9 +285,9 @@ const getDashboardData = async (userId: string, startDate: Date | string = dates
       paid,
       unpaid,
     };
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error fetching invoices data: ${(error as Error).message}`);
+  } 
 };
 
 const getPaidInvoices = async (userId: string, startDate: Date | string = dates.startDate, endDate: Date | string = dates.endDate) => {
@@ -344,15 +344,15 @@ const getPaidInvoices = async (userId: string, startDate: Date | string = dates.
       }));
 
     return finalInvoices;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    throw new Error(`Error getting paid invoices: ${(error as Error).message}`);
+  } 
 };
 
 export {
   findUser,
   updateUser,
-  findInvoices,
+  // findInvoices,
   getInvoices,
   getInvoice,
   addInvoice,

@@ -4,8 +4,10 @@ import "./globals.css";
 import Footer from "@/components/common/footer";
 import { Toaster } from "react-hot-toast";
 import AppConfig from "@/config/app.config";
-import ErrorBoundary from "@/components/error";
-import MyErrorBoundary from "@/components/error";
+import AppErrorBoundary from "@/components/error";
+
+
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <MyErrorBoundary>
+      <AppErrorBoundary>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -38,7 +40,7 @@ export default function RootLayout({
           <Toaster />
           <Footer />
         </body>
-      </MyErrorBoundary>
+      </AppErrorBoundary>
     </html>
   );
 }

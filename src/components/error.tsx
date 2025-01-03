@@ -27,7 +27,7 @@ interface ErrorBoundaryProps {
   children: ReactNode;
 }
 
-const MyErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
+const AppErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   return (
     <ErrorBoundary
       fallback={<ErrorSection />}
@@ -38,4 +38,4 @@ const MyErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   );
 };
 
-export default MyErrorBoundary;
+export default AppErrorBoundary;

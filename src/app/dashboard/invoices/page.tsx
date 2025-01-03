@@ -9,8 +9,11 @@ import DashNavbar from "@/components/dashboard/navbar/dash-nav";
 // import { findInvoices } from "@/lib/prisma/utils";
 // import { getAuth } from "@/auth";
 
-const InvoicePage = async ({ searchParams }: { searchParams: { startdate: string, enddate: string, query: string }}) => {
-
+const InvoicePage = async ({
+  searchParams,
+}: {
+  searchParams: { startdate: string; enddate: string };
+}) => {
   const sParams = (await searchParams);
 
   // const session = await getAuth();
@@ -18,18 +21,19 @@ const InvoicePage = async ({ searchParams }: { searchParams: { startdate: string
   // const data = await findInvoices(session?.user?.id as string, query);
   // console.log('query data', data);
 
-
-
   return (
     <DashboardLayout>
-      <DashNavbar title="Invoices"/>
+      <DashNavbar title="Invoices" />
       <Section classes="p-1">
         <div className="flex items-center gap-3">
           <CreateInvoiceButton />
           <SearchBox />
         </div>
         <Suspense fallback={<Spinner />}>
-          <InvoiceTable startDate={sParams.startdate} endDate={sParams.enddate}/>
+          <InvoiceTable
+            startDate={sParams.startdate}
+            endDate={sParams.enddate}
+          />
         </Suspense>
       </Section>
     </DashboardLayout>

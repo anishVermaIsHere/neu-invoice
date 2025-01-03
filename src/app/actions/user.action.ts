@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 
 export const handleLogout = async () => await signOut();
 
-export const onboardUser = async (prevState: any, formData: FormData) => {
+export const onboardUser = async (_: unknown, formData: FormData) => {
   const session = await getAuth();
 
   const submission = parseWithZod(formData, {

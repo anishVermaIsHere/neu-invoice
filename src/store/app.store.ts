@@ -16,7 +16,7 @@ export const useAppStore = create<AppStoreState>()((set) => ({
   isDialog: false,
   dialogConfirm: () => {},
   setDialogConfirm: (handler) => set(() => ({ dialogConfirm: handler })),
-  setIsDialog: (value) => set((state) => ({ isDialog: value })),
+  setIsDialog: (value) => set(() => ({ isDialog: value })),
   setIsSidebar: () => set((state) => ({ isSidebar: !state.isSidebar })),
   resetDialog: () => set(() => ({ isDialog: false, dialogConfirm: ()=>{} }))
 }));

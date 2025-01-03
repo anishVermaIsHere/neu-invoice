@@ -17,7 +17,7 @@ const sender = {
   name: AppConfig.mailTrap.senderName,
 };
 
-export async function createInvoice(prevState: any, formData: FormData) {  
+export async function createInvoice(_: unknown, formData: FormData) {  
   const submission = parseWithZod(formData, {
     schema: invoiceSchema,
   });
@@ -34,26 +34,26 @@ export async function createInvoice(prevState: any, formData: FormData) {
   });
 
 
-  // mailtrapClient.send({
-  //   from: sender,
-  //   to: [{ email: invoice.clientEmail }],
-  //   template_uuid: "794e66aa-d559-469d-9730-f6ce99a991e9",
-  //   template_variables: {
-  //     clientName: invoice.clientName,
-  //     invoiceNumber: invoice.invoiceNumber,
-  //     invoiceDate: new Intl.DateTimeFormat("en-US", {
-  //       dateStyle: "long",
-  //     }).format(new Date(submission.value.date)),
-  //     invoiceAmount: totalAmount,
-  //     invoiceTotal: totalAmount,
-  //     supportEmail: AppConfig.mailTrap.supportEmail,
-  //     companyName: `${AppConfig.appName} Invoice`
-  //   },
-  // });
+  mailtrapClient.send({
+    from: sender,
+    to: [{ email: invoice.clientEmail }],
+    template_uuid: "794e66aa-d559-469d-9730-f6ce99a991e9",
+    template_variables: {
+      clientName: invoice.clientName,
+      invoiceNumber: invoice.invoiceNumber,
+      invoiceDate: new Intl.DateTimeFormat("en-US", {
+        dateStyle: "long",
+      }).format(new Date(submission.value.date)),
+      invoiceAmount: totalAmount,
+      invoiceTotal: totalAmount,
+      supportEmail: AppConfig.mailTrap.supportEmail,
+      companyName: `${AppConfig.appName} Invoice`
+    },
+  });
 }
 
 
-export async function editInvoice(prevState: any, formData: FormData) {
+export async function editInvoice(_: unknown, formData: FormData) {
   const submission = parseWithZod(formData, {
     schema: invoiceSchema,
   });
