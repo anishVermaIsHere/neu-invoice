@@ -11,17 +11,24 @@ import { RecentInvoices } from "@/components/dashboard/recent-invoices";
 import Section from "@/components/common/section";
 import DashNavbar from "@/components/dashboard/navbar/dash-nav";
 
-const DashboardPage = async ({ searchParams }: { searchParams: { startdate: string, enddate: string }}) => {
+const DashboardPage = async ({
+  searchParams,
+}: {
+  searchParams: { startdate: string; enddate: string };
+}) => {
   const session = await getAuth();
-  const sParams = (await searchParams);
+  const sParams = await searchParams;
   const { startdate, enddate } = sParams;
-
 
   if (!session?.user?.id) {
     redirect("/login");
   }
 
-  const { total, paid, unpaid } = await getDashboardData(session?.user?.id, startdate, enddate);
+  const { total, paid, unpaid } = await getDashboardData(
+    session?.user?.id,
+    startdate,
+    enddate
+  );
 
   const dashboardCards = [
     {
@@ -60,9 +67,9 @@ const DashboardPage = async ({ searchParams }: { searchParams: { startdate: stri
 
   return (
     <DashboardLayout>
+        <DashNavbar title={`Hi ${session?.user?.firstName}!` || "User"} />
       {total?.length ? (
         <>
-          <DashNavbar title={`Hi ${session?.user?.firstName}!` || 'User'}/>
           <Section classes="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
             {dashboardCards.map((dcard) => (
               <DashCard key={dcard.id} {...dcard} />
@@ -70,7 +77,7 @@ const DashboardPage = async ({ searchParams }: { searchParams: { startdate: stri
           </Section>
 
           <Section classes="grid grid-cols-1 gap-4 xl:grid-cols-3 mb-4">
-            <GraphSection startDate={startdate} endDate={enddate}/>
+            <GraphSection startDate={startdate} endDate={enddate} />
           </Section>
 
           <Section>
