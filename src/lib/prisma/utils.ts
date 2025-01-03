@@ -100,7 +100,7 @@ const getInvoices = async (
         createdAt: true,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "desc"
       },
     });
   } catch (error: any) {
